@@ -5,6 +5,16 @@
   --foreground: #171717;
 }
 
+module.exports = {
+  content: [
+    "./app/**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: { extend: {} }
+  plugins: [],
+};
+
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

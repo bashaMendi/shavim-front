@@ -73,7 +73,8 @@ export default function Header() {
           <Link href="/auth/login" tabIndex={0} aria-label="התחברות">
             <Button variant="primary" className="px-2 py-1 text-sm h-8 min-w-0 flex items-center gap-2 rtl:gap-reverse">
               <User size={16} />
-              התחברות / הרשמה
+              <span className="block md:hidden">התחברות</span>
+              <span className="hidden md:block">התחברות / הרשמה</span>
             </Button>
           </Link>
         </div>

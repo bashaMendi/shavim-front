@@ -9,7 +9,7 @@ export default function DesktopNav() {
   const { user } = useAuth();
 
   return (
-    <nav className="hidden md:flex items-center space-x-6 rtl:space-x-reverse focus:outline-none">
+    <nav className="hidden md:flex items-center gap-6 rtl:gap-reverse focus:outline-none" role="navigation" aria-label="ניווט ראשי">
       {staticRoutes.map((route) => (
         <NavLink key={route.path} href={route.path}>
           {route.label}

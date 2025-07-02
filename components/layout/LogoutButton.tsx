@@ -27,7 +27,7 @@ export default function LogoutButton() {
       onClick={handleLogout}
       disabled={isLoading}
       variant="danger"
-      className="text-red-500 hover:underline focus:outline-none"
+      className="hover:underline focus:outline-none"
     >
       {isLoading ? 'Logging out…' : 'Logout'}
     </Button>

@@ -50,6 +50,8 @@ export default function MobileNav() {
         ref={drawerRef}
         className={`w-1/2 max-w-xs h-full bg-white shadow-lg p-4 rtl:border-l ltr:border-r fixed right-0 top-0 z-50 transition-transform duration-300 transform ${visible ? 'translate-x-0' : 'translate-x-full'} rtl:direction-rtl`}
         style={{ minWidth: 240 }}
+        role="navigation"
+        aria-label="ניווט צדדי"
       >
         <Button
           onClick={toggle}
@@ -59,27 +61,25 @@ export default function MobileNav() {
         >
           <span aria-hidden="true">×</span>
         </Button>
-        <nav className="flex flex-col items-end space-y-4 w-full mt-8 rtl:text-right">
+        {/* ניווט לינקים */}
+        <nav className="flex flex-col items-end gap-4 w-full rtl:text-right" role="menu" aria-label="קישורים">
           {staticRoutes.map((route) => (
             <NavLink key={route.path} href={route.path} onClick={toggle} className="transition-colors duration-200 hover:bg-blue-100 hover:text-blue-700 rounded px-3 py-2 w-full text-right" >
               {route.label}
             </NavLink>
           ))}
-
           {user?.role === 'admin' &&
             adminRoutes.map((route) => (
               <NavLink key={route.path} href={route.path} onClick={toggle} className="transition-colors duration-200 hover:bg-blue-100 hover:text-blue-700 rounded px-3 py-2 w-full text-right" >
                 {route.label}
               </NavLink>
             ))}
-
           {user?.role === 'lecturer' &&
             lecturerRoutes.map((route) => (
               <NavLink key={route.path} href={route.path} onClick={toggle} className="transition-colors duration-200 hover:bg-blue-100 hover:text-blue-700 rounded px-3 py-2 w-full text-right" >
                 {route.label}
               </NavLink>
             ))}
-
           {user ? (
             <LogoutButton />
           ) : (

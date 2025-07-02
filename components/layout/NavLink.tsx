@@ -18,7 +18,10 @@ export default function NavLink({ children, onClick, className = '', ...linkProp
   return (
     <Link
       {...linkProps}
-      className={`block py-2 md:inline-block md:py-0 focus:outline-none transition-colors duration-200 hover:bg-blue-100 hover:text-blue-700 rounded px-3 ${isActive ? 'bg-blue-100 text-blue-700 font-bold' : ''} ${className}`}
+      className={`block md:inline-block px-3 py-1 rounded-full focus:outline-none transition-colors duration-200
+        hover:bg-blue-100 hover:text-blue-700
+        ${isActive ? 'bg-blue-100 text-blue-700 font-bold' : ''}
+        ${className}`}
       onClick={onClick}
       aria-current={isActive ? 'page' : undefined}
     >

@@ -6,16 +6,16 @@ export interface Route {
 
 // קישורים קבועים לכולם
 export const staticRoutes: Route[] = [
-  { label: 'Home', path: '/' },
+  { label: 'בית', path: '/' },
   { label: 'מרצים', path: '/catalog' },
-  { label: 'About', path: '/about' },
-  { label: 'Contact', path: '/support/contact' },
+  { label: 'אודות', path: '/about' },
+  { label: 'צור קשר', path: '/support/contact' },
 ];
 
 // קישורים ייעודיים ל-Admin (מוצגים אם user.role === 'admin')
 export const adminRoutes: Route[] = [
   { label: 'Dashboard Admin', path: '/admin/dashboard' },
-  { label: 'Users', path: '/admin/users' },
+  { label: 'משתמשים', path: '/admin/users' },
   { label: 'Lectures Admin', path: '/admin/lectures' },
 ];
 

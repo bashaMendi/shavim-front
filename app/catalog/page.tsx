@@ -1,5 +1,5 @@
 'use client';
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { useLecturers, Lecturer } from '@/features/lectures/hooks/useLecturers';
 import { Loader } from '@/components/common/Loader';
 import { ErrorMessage } from '@/components/common/ErrorMessage';
@@ -49,6 +49,22 @@ export default function CatalogPage() {
     }
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
+  const loaderRef = useRef<HTMLDivElement | null>(null);
+
+  // אינפיניטי סקרול: טען עוד כשמגיעים לסוף
+  useEffect(() => {
+    if (!hasNextPage || isFetchingNextPage) return;
+    const handleScroll = () => {
+      if (!loaderRef.current) return;
+      const rect = loaderRef.current.getBoundingClientRect();
+      if (rect.top < window.innerHeight + 100) {
+        fetchNextPage();
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
   // טיפול בשגיאות משופר
   if (error) {
     return (
@@ -81,7 +97,10 @@ export default function CatalogPage() {
           {/* Grid של המרצים */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {Array.isArray(allLecturers) && allLecturers.map((lecturer) => (
-              <Card key={lecturer.id} className="hover:shadow-lg transition-shadow">
+              <Card key={lecturer.id} className="hover:shadow-lg transition-shadow flex flex-col items-center text-center">
+                {lecturer.imageUrl && (
+                  <img src={lecturer.imageUrl} alt={lecturer.name} className="w-20 h-20 rounded-full object-cover mb-2" />
+                )}
                 <h2 className="font-semibold">{lecturer.name}</h2>
                 {lecturer.topic && (
                   <p className="text-sm text-gray-500 mt-1">{lecturer.topic}</p>
@@ -105,22 +124,8 @@ export default function CatalogPage() {
           )}
 
           {/* כפתור "טען עוד" */}
-          <div className="text-center">
-            {hasNextPage && (
-              <Button 
-                variant="primary" 
-                onClick={handleLoadMore}
-                disabled={isFetchingNextPage}
-                className="relative"
-              >
-                {isFetchingNextPage ? 'טוען...' : 'טען עוד'}
-              </Button>
-            )}
-            {isFetchingNextPage && (
-              <div className="mt-2">
-                <Loader />
-              </div>
-            )}
+          <div ref={loaderRef} className="text-center min-h-[40px]">
+            {isFetchingNextPage && <Loader />}
           </div>
         </>
       )}

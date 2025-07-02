@@ -38,7 +38,7 @@
 // components/layout/Header.tsx
 'use client';
 import Link from 'next/link';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, User } from 'lucide-react';
 import { useGlobalUI } from '@/lib/zustand';
 import MobileNav from './MobileNav';
 import DesktopNav from './DesktopNav';
@@ -51,29 +51,30 @@ export default function Header() {
   return (
     <header className="bg-white shadow">
       {/* חלק עליון: המבורגר + לוגו + ניווט Desktop + כפתור Login */}
-      <div className="flex items-center justify-between px-4 py-4 max-w-screen-xl mx-auto">
-        <div className="flex items-center space-x-4 rtl:space-x-reverse">
+      <div className="flex items-center justify-between max-w-screen-2xl mx-auto px-4 py-4">
+        {/* לוגו + כפתור המבורגר */}
+        <div className="flex items-center gap-4 rtl:gap-reverse">
           <Button
             className="md:hidden"
             onClick={toggle}
-            aria-label={isOpen ? 'Close menu' : 'Open menu'}
+            aria-label={isOpen ? 'סגור תפריט' : 'פתח תפריט'}
             variant="icon"
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </Button>
-
-          <Link href="/">
+          <Link href="/" aria-label="מעבר לדף הבית">
             <h1 className="text-xl font-bold">שווים בהרצאה</h1>
           </Link>
         </div>
-
-        {/* ניווט Desktop במרכז (md ומעלה) */}
+        {/* ניווט דסקטופ */}
         <DesktopNav />
-
-        {/* כפתור Login בצד שמאל (תמיד גלוי) */}
-        <div className="flex items-center">
-          <Link href="/auth/login" className="hover:underline focus:outline-none ml-2">
-            Login
+        {/* כפתור Login */}
+        <div className="flex items-center" role="navigation" aria-label="כניסה">
+          <Link href="/auth/login" tabIndex={0} aria-label="התחברות">
+            <Button variant="primary" className="px-2 py-1 text-sm h-8 min-w-0 flex items-center gap-2 rtl:gap-reverse">
+              <User size={16} />
+              התחברות / הרשמה
+            </Button>
           </Link>
         </div>
       </div>

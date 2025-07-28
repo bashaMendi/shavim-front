@@ -63,7 +63,15 @@ export default function MobileNav() {
         </Button>
         {/* ניווט לינקים */}
         <nav className="flex flex-col items-end gap-4 w-full rtl:text-right" role="menu" aria-label="קישורים">
-          {staticRoutes.map((route) => (
+          {staticRoutes.slice(0, 2).map((route) => (
+            <NavLink key={route.path} href={route.path} onClick={toggle} className="transition-colors duration-200 hover:bg-blue-100 hover:text-blue-700 rounded px-3 py-2 w-full text-right" >
+              {route.label}
+            </NavLink>
+          ))}
+          <NavLink href="/lectures" onClick={toggle} className="transition-colors duration-200 hover:bg-blue-100 hover:text-blue-700 rounded px-3 py-2 w-full text-right" >
+            ההרצאות שלנו
+          </NavLink>
+          {staticRoutes.slice(2).map((route) => (
             <NavLink key={route.path} href={route.path} onClick={toggle} className="transition-colors duration-200 hover:bg-blue-100 hover:text-blue-700 rounded px-3 py-2 w-full text-right" >
               {route.label}
             </NavLink>

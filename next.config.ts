@@ -1,13 +1,16 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-};
-module.exports = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ['images.unsplash.com'],
+    domains: [
+      'randomuser.me',
+      'images.unsplash.com',
+      'images.pexels.com',
+      // add other domains as needed
+    ],
   },
 };
+
 export default nextConfig;

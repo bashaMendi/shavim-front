@@ -21,3 +21,12 @@ body {
   background: linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%);
   color: var(--foreground);
 }
+
+/* Hide scrollbar utility */
+.no-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}

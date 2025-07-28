@@ -1,46 +1,30 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { fakeLecturers } from '../data/fakeLecturers';
+import { LectureCardData } from '../types';
+import { fakeLectures } from '../data/fakeLectures';
 
-export interface Lecturer {
-  id: string;
-  name: string;
-  imageUrl?: string;
-  topic?: string;
-}
+const PAGE_SIZE = 8;
 
-export interface LecturersResponse {
-  lecturers: Lecturer[];
-  currentPage: number;
-  totalPages: number;
-  totalCount?: number;
-}
-
-export function useLecturers(searchTerm: string) {
-  // פייק דאטה
-  const [data, setData] = useState<Lecturer[]>([]);
+export function useLectures(searchTerm: string) {
+  const [data, setData] = useState<LectureCardData[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(false);
   const [isFetchingNextPage, setIsFetchingNextPage] = useState(false);
 
-  // page size
-  const PAGE_SIZE = 8;
-
-  // חיפוש וסינון
   useEffect(() => {
     setLoading(true);
     setError(null);
     setPage(1);
     setTimeout(() => {
-      let filtered = fakeLecturers;
+      let filtered = fakeLectures;
       if (searchTerm) {
         const term = searchTerm.toLowerCase();
-        filtered = fakeLecturers.filter(l =>
-          l.name.toLowerCase().includes(term) ||
-          (l.topic && l.topic.toLowerCase().includes(term))
+        filtered = fakeLectures.filter(l =>
+          l.title.toLowerCase().includes(term) ||
+          l.lecturerName.toLowerCase().includes(term)
         );
       }
       setHasNextPage(filtered.length > PAGE_SIZE);
@@ -49,16 +33,15 @@ export function useLecturers(searchTerm: string) {
     }, 300);
   }, [searchTerm]);
 
-  // טען עמוד נוסף
   const fetchNextPage = useCallback(() => {
     setIsFetchingNextPage(true);
     setTimeout(() => {
-      let filtered = fakeLecturers;
+      let filtered = fakeLectures;
       if (searchTerm) {
         const term = searchTerm.toLowerCase();
-        filtered = fakeLecturers.filter(l =>
-          l.name.toLowerCase().includes(term) ||
-          (l.topic && l.topic.toLowerCase().includes(term))
+        filtered = fakeLectures.filter(l =>
+          l.title.toLowerCase().includes(term) ||
+          l.lecturerName.toLowerCase().includes(term)
         );
       }
       const nextPage = page + 1;

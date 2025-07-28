@@ -10,7 +10,13 @@ export default function DesktopNav() {
 
   return (
     <nav className="hidden md:flex items-center gap-6 rtl:gap-reverse focus:outline-none" role="navigation" aria-label="ניווט ראשי">
-      {staticRoutes.map((route) => (
+      {staticRoutes.slice(0, 2).map((route) => (
+        <NavLink key={route.path} href={route.path}>
+          {route.label}
+        </NavLink>
+      ))}
+      <NavLink href="/lectures">ההרצאות שלנו</NavLink>
+      {staticRoutes.slice(2).map((route) => (
         <NavLink key={route.path} href={route.path}>
           {route.label}
         </NavLink>

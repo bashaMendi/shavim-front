@@ -21,169 +21,62 @@ function shuffleArray<T>(array: T[]): T[] {
 export default function Home() {
   const [lectures, setLectures] = useState<LectureCardData[]>(fakeLectures);
   const carouselRef = useRef<HTMLDivElement>(null);
-  const animationRef = useRef<number | undefined>(undefined);
-  const lastTimestampRef = useRef<number | null>(null);
 
   // Duplicate lectures for infinite effect
   const infiniteLectures = lectures.length > 0 ? [...lectures, ...lectures] : [];
 
   useEffect(() => {
-    console.log('Setting lectures, fakeLectures length:', fakeLectures.length);
     if (fakeLectures.length > 0) {
       // Use all lectures instead of just 6 selected ones
       setLectures(fakeLectures);
     }
   }, [fakeLectures]);
 
-  // Smooth continuous auto-scroll מימין לשמאל
+  // Remove auto-scroll - only manual navigation with buttons
   useEffect(() => {
     if (!carouselRef.current || lectures.length === 0) {
-      console.log('Carousel not ready:', { carouselRef: !!carouselRef.current, lecturesLength: lectures.length });
       return;
     }
-    
-    console.log('Starting carousel animation');
-    
-    let animationId: number;
-    let lastTime = 0;
-    const speed = 100; // פיקסלים לשנייה - מהירות גבוהה יותר
-    let isPaused = false;
-    
-    function animate(currentTime: number) {
-      if (!carouselRef.current) return;
-      
-      if (isPaused) {
-        animationId = requestAnimationFrame(animate);
-        return;
-      }
-      
-      if (lastTime === 0) {
-        lastTime = currentTime;
-      }
-      
-      const deltaTime = currentTime - lastTime;
-      const scrollAmount = (speed * deltaTime) / 1000; // חישוב נכון יותר
-      
-      carouselRef.current.scrollLeft += scrollAmount;
-      
-      // בדיקה אם הגענו לסוף - עם margin
-      const maxScroll = carouselRef.current.scrollWidth - carouselRef.current.clientWidth;
-      if (carouselRef.current.scrollLeft >= maxScroll) {
-        carouselRef.current.scrollLeft = 0;
-      }
-      
-      // Debug - הדפס כל 60 פריימים (כל שנייה)
-      if (Math.floor(currentTime / 1000) % 2 === 0 && Math.floor(currentTime / 16.67) % 60 === 0) {
-        console.log('Animation running - scrollLeft:', carouselRef.current.scrollLeft);
-      }
-      
-      lastTime = currentTime;
-      animationId = requestAnimationFrame(animate);
-    }
-    
-    // בדיקה שהאנימציה לא רצה כבר
-    if (animationRef.current) {
-      cancelAnimationFrame(animationRef.current);
-    }
-    
-    // התחל את האנימציה מיד
-    console.log('Starting animation with speed:', speed);
-    console.log('Carousel dimensions:', {
-      scrollWidth: carouselRef.current.scrollWidth,
-      clientWidth: carouselRef.current.clientWidth,
-      scrollLeft: carouselRef.current.scrollLeft
-    });
-    
-    // וודא שהקרוסלה מוכנה לפני שמתחילים
-    if (carouselRef.current.scrollWidth > carouselRef.current.clientWidth) {
-      animationId = requestAnimationFrame(animate);
-      animationRef.current = animationId;
-    } else {
-      console.log('Carousel not ready yet, waiting...');
-    }
-    
-    // Pause on hover
-    const carousel = carouselRef.current;
-    const handleMouseEnter = () => { 
-      console.log('Mouse enter - pausing');
-      isPaused = true; 
-    };
-    const handleMouseLeave = () => { 
-      console.log('Mouse leave - resuming');
-      isPaused = false; 
-      // לא מאפסים את ה-timer כדי שהמהירות תישאר קבועה
-    };
-    
-    carousel?.addEventListener('mouseenter', handleMouseEnter);
-    carousel?.addEventListener('mouseleave', handleMouseLeave);
-    
-    return () => {
-      if (animationId) {
-        cancelAnimationFrame(animationId);
-      }
-      carousel?.removeEventListener('mouseenter', handleMouseEnter);
-      carousel?.removeEventListener('mouseleave', handleMouseLeave);
-    };
   }, [lectures]);
 
-  // Manual navigation functions
+  // Manual navigation functions - smooth infinite scroll
   const handlePrev = () => {
-    console.log('Prev button clicked');
-    if (!carouselRef.current) {
-      console.log('No carousel ref');
-      return;
-    }
-    if (lectures.length === 0) {
-      console.log('No lectures');
-      return;
-    }
+    if (!carouselRef.current || lectures.length === 0) return;
     
     const carousel = carouselRef.current;
-    const cardWidth = carousel.firstElementChild?.clientWidth || 320; // ברירת מחדל 320px
+    const cardWidth = carousel.firstElementChild?.clientWidth || 320;
     const margin = 16; // mx-2 = 8px * 2
     const totalCardWidth = cardWidth + margin;
     
-    console.log('Card width:', cardWidth, 'Total width:', totalCardWidth, 'Current scrollLeft:', carousel.scrollLeft);
+    // זז אחורה בדיוק כרטיס אחד
+    const newScrollLeft = carousel.scrollLeft - totalCardWidth;
     
-    // זז אחורה - אם הגענו להתחלה, עבור לסוף
-    const newScrollLeft = carousel.scrollLeft - (totalCardWidth * 2);
+    // אם הגענו להתחלה, עבור לסוף בצורה חלקה
     if (newScrollLeft < 0) {
+      // זז לסוף הקרוסלה
       carousel.scrollLeft = carousel.scrollWidth - carousel.clientWidth;
-      console.log('Wrapped to end - new scrollLeft:', carousel.scrollLeft);
     } else {
       carousel.scrollLeft = newScrollLeft;
-      console.log('Moved back - new scrollLeft:', carousel.scrollLeft);
     }
   };
 
   const handleNext = () => {
-    console.log('Next button clicked');
-    if (!carouselRef.current) {
-      console.log('No carousel ref');
-      return;
-    }
-    if (lectures.length === 0) {
-      console.log('No lectures');
-      return;
-    }
+    if (!carouselRef.current || lectures.length === 0) return;
     
     const carousel = carouselRef.current;
-    const cardWidth = carousel.firstElementChild?.clientWidth || 320; // ברירת מחדל 320px
+    const cardWidth = carousel.firstElementChild?.clientWidth || 320;
     const margin = 16; // mx-2 = 8px * 2
     const totalCardWidth = cardWidth + margin;
     
-    console.log('Card width:', cardWidth, 'Total width:', totalCardWidth, 'Current scrollLeft:', carousel.scrollLeft);
-    
-    // זז קדימה - אם הגענו לסוף, עבור להתחלה
-    const newScrollLeft = carousel.scrollLeft + (totalCardWidth * 2);
+    // זז קדימה בדיוק כרטיס אחד
+    const newScrollLeft = carousel.scrollLeft + totalCardWidth;
     const maxScroll = carousel.scrollWidth - carousel.clientWidth;
     
+    // אם הגענו לסוף, עבור להתחלה בצורה חלקה
     if (newScrollLeft > maxScroll) {
       carousel.scrollLeft = 0;
-      console.log('Wrapped to start - new scrollLeft:', carousel.scrollLeft);
     } else {
       carousel.scrollLeft = newScrollLeft;
-      console.log('Moved forward - new scrollLeft:', carousel.scrollLeft);
     }
   };
 
@@ -194,7 +87,7 @@ export default function Home() {
       
       {/* Horizontal Carousel */}
       <section className="max-w-5xl mx-auto">
-        <h2 className="text-2xl font-bold mb-6 text-center text-blue-800">ההרצאות שלנו</h2>
+        <h2 className="text-3xl font-bold mb-6 text-center text-blue-800">ההרצאות שלנו</h2>
         <div className="relative">
           {/* Navigation Arrows - רק אם יש הרצאות */}
           {lectures.length > 0 && (

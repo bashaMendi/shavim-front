@@ -11,3 +11,6 @@ export { default as GoogleStyleSearchBar } from './GoogleStyleSearchBar';
 export { default as Rating } from './Rating';
 export { default as SmartFilter } from './SmartFilter';
 export { default as LectureSmartFilter } from './LectureSmartFilter';
+export { default as MediaGallery } from './MediaGallery';
+export { default as ExternalLinks } from './ExternalLinks';
+export { default as SimilarLectures } from './SimilarLectures';

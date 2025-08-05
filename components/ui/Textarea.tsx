@@ -16,11 +16,11 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     const textareaId = id ?? generatedId;
 
     const textareaClasses = `
-      w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent 
-      bg-white/50 backdrop-blur-sm transition-all duration-200 resize-none
-      ${icon ? (iconPosition === 'right' ? 'pr-10 pl-4' : 'pl-10 pr-4') : 'px-4'}
-      py-3
-      ${error ? 'border-red-500 focus:ring-red-500' : ''}
+      w-full border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
+      bg-white backdrop-blur-sm transition-all duration-200 resize-none
+      ${icon ? (iconPosition === 'right' ? 'pr-10 pl-3' : 'pl-10 pr-3') : 'px-3'}
+      py-2
+      ${error ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'}
       ${className}
     `.trim();
 
@@ -49,7 +49,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           />
         </div>
         {error && (
-          <p id={`${textareaId}-error`} className="mt-1 text-sm text-red-600">
+          <p id={`${textareaId}-error`} className="mt-1 text-sm text-red-600 font-normal">
             {error}
           </p>
         )}
